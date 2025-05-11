@@ -1,5 +1,7 @@
 from ninja import NinjaAPI, Schema
-from typing import List
+from typing import List, Optional
+from datetime import datetime
+
 from .models import Todo
 from django.shortcuts import get_object_or_404
 
@@ -9,6 +11,7 @@ class TodoSchema(Schema):
     id: int
     title: str
     completed: bool
+    due_date: Optional[datetime]
     
 @api.get("/todos", response = List[TodoSchema])
 def list_todos(request):
@@ -23,6 +26,7 @@ def get_todo(request, todo_id: int):
 class TodoIn(Schema):
     title: str
     completed: bool = False
+    due_date: Optional[datetime] = None
     
 @api.post("/todos", response = TodoSchema)
 def create_todo(request, todo_in: TodoIn):
